@@ -1,4 +1,4 @@
-package net.ludeke.rest.jersey;
+package example.jersey;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -6,7 +6,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import net.ludeke.rest.guice.Service;
+import example.guice.Service;
+
 
 
 /**
@@ -25,6 +26,6 @@ public class MyResource {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getIt() {
-		return service.get() + " Got it!";
+		return service.get();
 	}
 }

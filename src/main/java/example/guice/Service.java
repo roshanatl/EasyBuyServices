@@ -1,16 +1,16 @@
-package net.ludeke.rest.guice;
+package example.guice;
 
 import com.google.inject.servlet.SessionScoped;
 
 @SessionScoped
 public class Service {
 
-	private int i = 0;
+	public static final String SERVICE_STRING = "SERVICE_STRING";
 
 	public Service() {}
 
 	public String get() {
-		return i++ + " got it from guice service";
+		return SERVICE_STRING;
 	}
 
 }

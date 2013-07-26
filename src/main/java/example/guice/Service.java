@@ -1,16 +1,24 @@
 package example.guice;
 
-import com.google.inject.servlet.SessionScoped;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.UriInfo;
 
-@SessionScoped
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.servlet.RequestScoped;
+
+@Singleton
 public class Service {
 
-	public static final String SERVICE_STRING = "SERVICE_STRING";
+    public static final String SERVICE_STRING = "SERVICE_STRING";
 
-	public Service() {}
+    public Service() {
+    }
 
-	public String get() {
-		return SERVICE_STRING;
-	}
+    @Inject
+    public String get() {
+
+        return SERVICE_STRING;
+    }
 
 }

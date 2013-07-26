@@ -1,3 +1,5 @@
+import static org.junit.Assert.assertEquals;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -9,36 +11,36 @@ import org.junit.Test;
 
 import example.guice.Service;
 
-import static org.junit.Assert.*;
+public class ServiceTomcatTest {
 
-public class ServiceTest {
-
-    private static EmbeddedJetty embeddedJetty;
+    private static EmbeddedTomcat embeddedTomcat;
+    
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        embeddedJetty = new EmbeddedJetty();
-        embeddedJetty.start();
+        embeddedTomcat= new EmbeddedTomcat();
+        embeddedTomcat.start();
     }
     
     @AfterClass
     public static void afterClass() throws Exception {
-        embeddedJetty.stop();
+        embeddedTomcat.stop();
     }
 
     @Test
     public void givenRunningJettyInstance_whenGetMyresource_thenServiceStringReturned() {
         Client client = ClientBuilder.newClient();
         
-        System.out.println(embeddedJetty.getBaseUri());
+        System.out.println(embeddedTomcat.getBaseURI());
         
-        WebTarget path = client.target(embeddedJetty.getBaseUri())
+        WebTarget path = client.target(embeddedTomcat.getBaseURI())
                         .path("myresource");
         String entity = path
                         .request(MediaType.TEXT_PLAIN_TYPE)
                         .get(String.class);
 
         assertEquals(Service.SERVICE_STRING, entity);
+        
         
     }
 

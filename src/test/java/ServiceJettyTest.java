@@ -1,47 +1,80 @@
-import static org.junit.Assert.assertEquals;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.guice.CamelModuleWithRouteTypes;
+import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import example.guice.Service;
+import com.google.inject.Injector;
 
-public class ServiceJettyTest {
+import example.guice.Service;
+import example.jersey.Main;
+
+public class ServiceJettyTest extends CamelTestSupport {
+
+    @EndpointInject(uri = "mock:result")
+    protected MockEndpoint resultEndpoint;
 
     private static EmbeddedJetty embeddedJetty;
-    
+    private static Injector injector;
+
+    @Test
+    public void shouldEnqueueMessageOnMyresource() throws InterruptedException {
+        String response = getMyresource();
+
+        assertEquals(Service.SERVICE_STRING, response);
+
+        resultEndpoint.expectedMessageCount(1);
+        resultEndpoint.setResultWaitTime(2000);
+        resultEndpoint.assertIsSatisfied();
+    }
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        embeddedJetty = new EmbeddedJetty();
+        Main main = new Main() {
+            @Override
+            protected CamelModuleWithRouteTypes createCamelModules() {
+                return new CamelModuleWithRouteTypes(TestRoute.class);
+            }
+        };
+        embeddedJetty = new EmbeddedJetty(main);
         embeddedJetty.start();
+        injector = Main.injector;
     }
-    
+
+    @Override
+    protected CamelContext createCamelContext() {
+        return injector.getInstance(CamelContext.class);
+    }
+
+    private static class TestRoute extends RouteBuilder {
+        @Override
+        public void configure() throws Exception {
+            from("direct:enqueue").to("mock:result");
+        }
+    }
+
     @AfterClass
     public static void afterClass() throws Exception {
         embeddedJetty.stop();
     }
 
-    @Test
-    public void givenRunningJettyInstance_whenGetMyresource_thenServiceStringReturned() {
+    private String getMyresource() {
         Client client = ClientBuilder.newClient();
-        
-        System.out.println(embeddedJetty.getBaseUri());
-        
-        WebTarget path = client.target(embeddedJetty.getBaseUri())
-                        .path("myresource");
-        String entity = path
-                        .request(MediaType.TEXT_PLAIN_TYPE)
-                        .get(String.class);
 
-        assertEquals(Service.SERVICE_STRING, entity);
-        
-        
+        WebTarget path = client.target(embeddedJetty.getBaseUri())
+            .path("myresource");
+        return path
+            .request(MediaType.TEXT_PLAIN_TYPE)
+            .get(String.class);
     }
 
 }

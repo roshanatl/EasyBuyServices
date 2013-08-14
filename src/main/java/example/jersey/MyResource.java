@@ -12,8 +12,6 @@ import com.google.inject.servlet.RequestScoped;
 
 import example.guice.Service;
 
-
-
 /**
  * Root resource (exposed at "myresource" path)
  */
@@ -31,7 +29,6 @@ public class MyResource {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getIt(@Context UriInfo uriInfo) {
-	    
-		return service.get();
+		return service.test();
 	}
 }

@@ -1,23 +1,20 @@
 package example.guice;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.UriInfo;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.ProducerTemplate;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.servlet.RequestScoped;
 
 @Singleton
 public class Service {
 
+    @EndpointInject(uri="direct:enqueue")
+    ProducerTemplate producer;
+
     public static final String SERVICE_STRING = "SERVICE_STRING";
 
-    public Service() {
-    }
-
-    @Inject
-    public String get() {
-
+    public String test() {
+        producer.sendBody("test");
         return SERVICE_STRING;
     }
 

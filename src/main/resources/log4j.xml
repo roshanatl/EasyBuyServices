@@ -8,7 +8,7 @@
         </layout>
     </appender>
 
-    <category name="example">
+    <category name="pl.pjagielski">
         <priority value="DEBUG"/>
     </category>
 

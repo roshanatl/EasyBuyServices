@@ -15,8 +15,8 @@ import org.junit.Test;
 
 import com.google.inject.Injector;
 
-import example.guice.Service;
-import example.jersey.Main;
+import pl.pjagielski.guice.Service;
+import pl.pjagielski.jersey.MainContextListener;
 
 public class ServiceJettyTest extends CamelTestSupport {
 
@@ -39,15 +39,15 @@ public class ServiceJettyTest extends CamelTestSupport {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        Main main = new Main() {
+        MainContextListener mainContextListener = new MainContextListener() {
             @Override
             protected CamelModuleWithRouteTypes createCamelModules() {
                 return new CamelModuleWithRouteTypes(TestRoute.class);
             }
         };
-        embeddedJetty = new EmbeddedJetty(main);
+        embeddedJetty = new EmbeddedJetty(mainContextListener);
         embeddedJetty.start();
-        injector = Main.injector;
+        injector = MainContextListener.injector;
     }
 
     @Override

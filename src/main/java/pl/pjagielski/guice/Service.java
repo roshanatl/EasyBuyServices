@@ -1,4 +1,4 @@
-package example.guice;
+package pl.pjagielski.guice;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;

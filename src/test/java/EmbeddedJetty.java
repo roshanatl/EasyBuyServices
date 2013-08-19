@@ -7,11 +7,15 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.servlet.ServletContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.servlet.GuiceFilter;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 public class EmbeddedJetty {
+
+    private static Logger logger = LoggerFactory.getLogger(EmbeddedJetty.class);
 
     private Server server;
     private GuiceServletContextListener guiceContextListener;
@@ -32,7 +36,7 @@ public class EmbeddedJetty {
         ServletHolder holder = contextHandler.addServlet(ServletContainer.class, "/*");
         holder.setInitParameter("javax.ws.rs.Application", "example.jersey.MyApplication");
 
-        System.out.println(">>> STARTING EMBEDDED JETTY SERVER");
+        logger.info(">>> STARTING EMBEDDED JETTY SERVER");
         server.start();
         
     }

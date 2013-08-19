@@ -1,4 +1,4 @@
-package example.camel;
+package pl.pjagielski.camel;
 
 import org.apache.camel.builder.RouteBuilder;
 

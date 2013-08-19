@@ -15,12 +15,14 @@ public class Application extends ResourceConfig {
 
     @Inject
     public Application(ServiceLocator serviceLocator) {
+        packages("pl.pjagielski.jersey");
+
         logger.info("Registering injectables...");
 
         GuiceBridge.getGuiceBridge().initializeGuiceBridge(serviceLocator);
 
         GuiceIntoHK2Bridge guiceBridge = serviceLocator.getService(GuiceIntoHK2Bridge.class);
         guiceBridge.bridgeGuiceInjector(MainContextListener.injector);
-
     }
+
 }

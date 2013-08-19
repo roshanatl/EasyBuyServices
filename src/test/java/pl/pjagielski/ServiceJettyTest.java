@@ -1,3 +1,5 @@
+package pl.pjagielski;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -28,7 +30,7 @@ public class ServiceJettyTest extends CamelTestSupport {
 
     @Test
     public void shouldEnqueueMessageOnMyresource() throws InterruptedException {
-        String response = getMyresource();
+        String response = getResource();
 
         assertEquals(Service.SERVICE_STRING, response);
 
@@ -67,11 +69,11 @@ public class ServiceJettyTest extends CamelTestSupport {
         embeddedJetty.stop();
     }
 
-    private String getMyresource() {
+    private String getResource() {
         Client client = ClientBuilder.newClient();
 
         WebTarget path = client.target(embeddedJetty.getBaseUri())
-            .path("myresource");
+            .path("resource");
         return path
             .request(MediaType.TEXT_PLAIN_TYPE)
             .get(String.class);

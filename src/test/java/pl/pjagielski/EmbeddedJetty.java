@@ -1,3 +1,5 @@
+package pl.pjagielski;
+
 import java.net.URI;
 import java.util.EnumSet;
 
@@ -34,7 +36,7 @@ public class EmbeddedJetty {
         contextHandler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
 
         ServletHolder holder = contextHandler.addServlet(ServletContainer.class, "/*");
-        holder.setInitParameter("javax.ws.rs.Application", "example.jersey.MyApplication");
+        holder.setInitParameter("javax.ws.rs.Application", "pl.pjagielski.jersey.Application");
 
         logger.info(">>> STARTING EMBEDDED JETTY SERVER");
         server.start();

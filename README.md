@@ -1,5 +1,4 @@
-jersey2-guice-camel-example
-===========================
+## jersey2-guice-camel-example
 
 Example project which integrates Jersey 2, Guice 3 and Camel 2.11. Requires Java 7 and Maven.
 

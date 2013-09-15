@@ -18,7 +18,7 @@ import org.junit.Test;
 import com.google.inject.Injector;
 
 import pl.pjagielski.guice.Service;
-import pl.pjagielski.jersey.MainContextListener;
+import pl.pjagielski.guice.MainContextListener;
 
 public class ServiceJettyTest extends CamelTestSupport {
 

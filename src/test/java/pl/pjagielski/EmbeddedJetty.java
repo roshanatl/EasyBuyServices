@@ -1,18 +1,18 @@
 package pl.pjagielski;
 
+import java.io.File;
 import java.net.URI;
-import java.util.EnumSet;
 
-import javax.servlet.DispatcherType;
-
+import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.glassfish.jersey.servlet.ServletContainer;
+import org.eclipse.jetty.util.resource.FileResource;
+import org.eclipse.jetty.webapp.Configuration;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.webapp.WebInfConfiguration;
+import org.eclipse.jetty.webapp.WebXmlConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.servlet.GuiceFilter;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 public class EmbeddedJetty {
@@ -27,16 +27,23 @@ public class EmbeddedJetty {
     }
 
     public void start() throws Exception {
-
         server = new Server(8080);
 
-        ServletContextHandler contextHandler = new ServletContextHandler(server, "/");
+        WebAppContext webAppContext = new WebAppContext();
+        webAppContext.setDescriptor("src/test/resources/WEB-INF/web.xml");
+        webAppContext.addEventListener(guiceContextListener);
+        webAppContext.setResourceBase("src/main/webapp");
+        webAppContext.setContextPath("/");
+        webAppContext.getMetaData().addContainerResource(new FileResource(new File("./target/classes").toURI()));
 
-        contextHandler.addEventListener(guiceContextListener);
-        contextHandler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
+        webAppContext.setConfigurations(new Configuration[] {
+            new AnnotationConfiguration(),
+            new WebXmlConfiguration(),
+            new WebInfConfiguration()
+        });
+        webAppContext.setParentLoaderPriority(true);
 
-        ServletHolder holder = contextHandler.addServlet(ServletContainer.class, "/*");
-        holder.setInitParameter("javax.ws.rs.Application", "pl.pjagielski.jersey.Application");
+        server.setHandler(webAppContext);
 
         logger.info(">>> STARTING EMBEDDED JETTY SERVER");
         server.start();

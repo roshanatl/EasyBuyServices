@@ -1,16 +1,18 @@
-package pl.pjagielski.jersey;
+package pl.pjagielski.guice;
 
 import org.apache.camel.guice.CamelModuleWithRouteTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
-import com.google.inject.servlet.ServletModule;
 
 import pl.pjagielski.camel.QueueRoute;
-import pl.pjagielski.guice.Service;
 
 public class MainContextListener extends GuiceServletContextListener {
 
@@ -25,9 +27,14 @@ public class MainContextListener extends GuiceServletContextListener {
     }
 
     protected Injector createInjector() {
-        return Guice.createInjector(createCamelModules(), new ServletModule() {
+        return Guice.createInjector(createCamelModules(), new AbstractModule() {
             @Override
-            protected void configureServlets() {
+            protected void configure() {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+                objectMapper.registerModule(new JodaModule());
+
+                bind(ObjectMapper.class).toInstance(objectMapper);
                 bind(Service.class);
             }
         });

@@ -1,6 +1,7 @@
 package pl.pjagielski.jersey;
 
 import javax.inject.Inject;
+import javax.ws.rs.ApplicationPath;
 
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -9,14 +10,15 @@ import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pl.pjagielski.guice.MainContextListener;
+
+@ApplicationPath("")
 public class Application extends ResourceConfig {
 
     private static Logger logger = LoggerFactory.getLogger(Application.class);
 
     @Inject
     public Application(ServiceLocator serviceLocator) {
-        packages("pl.pjagielski.jersey");
-
         logger.info("Registering injectables...");
 
         GuiceBridge.getGuiceBridge().initializeGuiceBridge(serviceLocator);

@@ -11,14 +11,20 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.guice.CamelModuleWithRouteTypes;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.google.inject.Injector;
 
-import pl.pjagielski.guice.Service;
 import pl.pjagielski.guice.MainContextListener;
+import pl.pjagielski.guice.Service;
+import pl.pjagielski.jersey.CurrentDate;
 
 public class ServiceJettyTest extends CamelTestSupport {
 
@@ -27,6 +33,8 @@ public class ServiceJettyTest extends CamelTestSupport {
 
     private static EmbeddedJetty embeddedJetty;
     private static Injector injector;
+
+    private Client client = createClient();
 
     @Test
     public void shouldEnqueueMessageOnMyresource() throws InterruptedException {
@@ -37,6 +45,16 @@ public class ServiceJettyTest extends CamelTestSupport {
         resultEndpoint.expectedMessageCount(1);
         resultEndpoint.setResultWaitTime(2000);
         resultEndpoint.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldGetCurrentDate() throws InterruptedException {
+        CurrentDate currentDate = getCurrentDate();
+
+        assertNotNull(currentDate);
+        assertNotNull(currentDate.getDate());
+        assertTrue(currentDate.getDate().isBeforeNow());
+        assertTrue(currentDate.getDate().isAfter(DateTime.now().minus(30000)));
     }
 
     @BeforeClass
@@ -70,13 +88,27 @@ public class ServiceJettyTest extends CamelTestSupport {
     }
 
     private String getResource() {
-        Client client = ClientBuilder.newClient();
-
         WebTarget path = client.target(embeddedJetty.getBaseUri())
             .path("resource");
         return path
             .request(MediaType.TEXT_PLAIN_TYPE)
             .get(String.class);
+    }
+
+    private CurrentDate getCurrentDate() {
+        WebTarget path = client.target(embeddedJetty.getBaseUri())
+            .path("resource").path("date");
+        return path
+            .request(MediaType.APPLICATION_JSON)
+            .get(CurrentDate.class);
+    }
+
+    private Client createClient() {
+        JacksonJsonProvider jacksonJsonProvider = new JacksonJaxbJsonProvider();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JodaModule());
+        jacksonJsonProvider.setMapper(objectMapper);
+        return ClientBuilder.newClient().register(jacksonJsonProvider);
     }
 
 }

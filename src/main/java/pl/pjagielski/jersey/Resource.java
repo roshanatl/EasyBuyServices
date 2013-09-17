@@ -45,16 +45,9 @@ public class Resource {
 
 	@GET
     @Path("/date")
-	@Produces(MediaType.TEXT_PLAIN)
-	public DateTime currentDate() {
-		return new DateTime();
-	}
-
-	@GET
-    @Path("/date")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DateTime currentDateAsJson() {
-		return new DateTime();
+	public CurrentDate currentDateAsJson() {
+		return new CurrentDate(DateTime.now());
 	}
 
 }

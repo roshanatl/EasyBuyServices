@@ -10,6 +10,7 @@ import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,12 @@ public class EmbeddedJetty {
         webAppContext.addEventListener(guiceContextListener);
         webAppContext.setResourceBase("src/main/webapp");
         webAppContext.setContextPath("/");
+        File[] mavenLibs = Maven.resolver().loadPomFromFile("pom.xml")
+                    .importCompileAndRuntimeDependencies()
+                    .resolve().withTransitivity().asFile();
+        for (File file: mavenLibs) {
+            webAppContext.getMetaData().addWebInfJar(new FileResource(file.toURI()));
+        }
         webAppContext.getMetaData().addContainerResource(new FileResource(new File("./target/classes").toURI()));
 
         webAppContext.setConfigurations(new Configuration[] {

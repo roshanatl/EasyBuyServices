@@ -1,4 +1,4 @@
-package pl.pjagielski.jersey;
+package org.EasyBuy.EasyBuyServices.jersey;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -9,11 +9,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.EasyBuy.EasyBuyServices.guice.Service;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import pl.pjagielski.guice.Service;
 
 @Singleton
 @Path("resource")

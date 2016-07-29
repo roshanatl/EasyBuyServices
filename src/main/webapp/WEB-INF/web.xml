@@ -12,7 +12,7 @@
     </filter-mapping>
 
     <listener>
-        <listener-class>pl.pjagielski.guice.MainContextListener</listener-class>
+        <listener-class>org.EasyBuy.EasyBuyServices.guice.MainContextListener</listener-class>
     </listener>
 
 </web-app>

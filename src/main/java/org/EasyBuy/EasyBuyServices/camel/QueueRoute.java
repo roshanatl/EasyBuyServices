@@ -1,4 +1,4 @@
-package pl.pjagielski.camel;
+package org.EasyBuy.EasyBuyServices.camel;
 
 import org.apache.camel.builder.RouteBuilder;
 

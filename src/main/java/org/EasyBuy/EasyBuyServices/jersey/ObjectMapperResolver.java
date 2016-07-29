@@ -1,11 +1,11 @@
-package pl.pjagielski.jersey;
+package org.EasyBuy.EasyBuyServices.jersey;
 
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.EasyBuy.EasyBuyServices.guice.MainContextListener;
 
-import pl.pjagielski.guice.MainContextListener;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Provider
 public class ObjectMapperResolver implements ContextResolver<ObjectMapper> {

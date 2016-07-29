@@ -1,4 +1,4 @@
-package pl.pjagielski.jersey;
+package org.EasyBuy.EasyBuyServices.jersey;
 
 import org.joda.time.DateTime;
 

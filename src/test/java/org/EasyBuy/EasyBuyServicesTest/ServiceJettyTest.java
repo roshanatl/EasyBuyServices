@@ -1,10 +1,13 @@
-package pl.pjagielski;
+package org.EasyBuy.EasyBuyServicesTest;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
+import org.EasyBuy.EasyBuyServices.guice.MainContextListener;
+import org.EasyBuy.EasyBuyServices.guice.Service;
+import org.EasyBuy.EasyBuyServices.jersey.CurrentDate;
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
@@ -21,10 +24,6 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.google.inject.Injector;
-
-import pl.pjagielski.guice.MainContextListener;
-import pl.pjagielski.guice.Service;
-import pl.pjagielski.jersey.CurrentDate;
 
 public class ServiceJettyTest extends CamelTestSupport {
 

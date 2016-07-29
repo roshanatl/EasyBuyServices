@@ -1,4 +1,4 @@
-package pl.pjagielski;
+package org.EasyBuy.EasyBuyServicesTest;
 
 import java.io.File;
 import java.net.URI;

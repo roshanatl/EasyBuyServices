@@ -8,7 +8,7 @@
         </layout>
     </appender>
 
-    <category name="pl.pjagielski">
+    <category name="org.EasyBuy.EasyBuyServices">
         <priority value="DEBUG"/>
     </category>
 

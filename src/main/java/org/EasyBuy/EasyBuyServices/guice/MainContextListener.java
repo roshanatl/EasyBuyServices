@@ -1,5 +1,6 @@
-package pl.pjagielski.guice;
+package org.EasyBuy.EasyBuyServices.guice;
 
+import org.EasyBuy.EasyBuyServices.camel.QueueRoute;
 import org.apache.camel.guice.CamelModuleWithRouteTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +12,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
-
-import pl.pjagielski.camel.QueueRoute;
 
 public class MainContextListener extends GuiceServletContextListener {
 

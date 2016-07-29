@@ -1,4 +1,4 @@
-package pl.pjagielski.guice;
+package org.EasyBuy.EasyBuyServices.guice;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;

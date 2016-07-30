@@ -17,13 +17,6 @@ public class AbzoobaRoute extends RouteBuilder {
     public void configure() throws Exception {
         from("direct:getAttributes")
         .marshal().json(JsonLibrary.Jackson)
-        .process(new Processor() {
-			
-			@Override
-			public void process(Exchange arg0) throws Exception {
-				System.out.println();
-			}
-		})
         .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
         .to(ABZOOBA_REST_URL)
         .convertBodyTo(String.class)

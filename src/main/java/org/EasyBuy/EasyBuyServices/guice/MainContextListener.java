@@ -1,5 +1,6 @@
 package org.EasyBuy.EasyBuyServices.guice;
 
+import org.EasyBuy.EasyBuyServices.camel.ItemRoute;
 import org.EasyBuy.EasyBuyServices.camel.QueueRoute;
 import org.apache.camel.guice.CamelModuleWithRouteTypes;
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class MainContextListener extends GuiceServletContextListener {
     }
 
     protected CamelModuleWithRouteTypes createCamelModules() {
-        return new CamelModuleWithRouteTypes(QueueRoute.class);
+        return new CamelModuleWithRouteTypes(QueueRoute.class,ItemRoute.class);
     }
 
 }

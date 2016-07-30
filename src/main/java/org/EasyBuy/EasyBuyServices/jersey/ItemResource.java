@@ -9,8 +9,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.EasyBuy.EasyBuyServices.Model.Item;
 import org.EasyBuy.EasyBuyServices.guice.Service;
-import org.apache.camel.EndpointInject;
-import org.apache.camel.ProducerTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

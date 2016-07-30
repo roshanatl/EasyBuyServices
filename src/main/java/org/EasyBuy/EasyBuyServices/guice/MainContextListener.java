@@ -1,5 +1,6 @@
 package org.EasyBuy.EasyBuyServices.guice;
 
+import org.EasyBuy.EasyBuyServices.camel.AbzoobaRoute;
 import org.EasyBuy.EasyBuyServices.camel.ItemRoute;
 import org.EasyBuy.EasyBuyServices.camel.QueueRoute;
 import org.apache.camel.guice.CamelModuleWithRouteTypes;
@@ -36,12 +37,17 @@ public class MainContextListener extends GuiceServletContextListener {
 
                 bind(ObjectMapper.class).toInstance(objectMapper);
                 bind(Service.class);
+                bind(AbzoobaService.class);
             }
         });
     }
 
-    protected CamelModuleWithRouteTypes createCamelModules() {
-        return new CamelModuleWithRouteTypes(QueueRoute.class,ItemRoute.class);
+    @SuppressWarnings("unchecked")
+	protected CamelModuleWithRouteTypes createCamelModules() {
+        return new CamelModuleWithRouteTypes(
+        		QueueRoute.class,
+        		ItemRoute.class,
+        		AbzoobaRoute.class);
     }
 
 }

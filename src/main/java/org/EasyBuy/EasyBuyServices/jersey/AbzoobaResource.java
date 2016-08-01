@@ -1,44 +1,41 @@
-package org.EasyBuy.EasyBuyServices.camel;
+package org.EasyBuy.EasyBuyServices.jersey;
 
-import java.util.Map;
-
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import org.EasyBuy.EasyBuyServices.utill.JsonstringToMap;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.model.dataformat.JsonLibrary;
-import org.codehaus.jettison.json.JSONObject;
+import org.EasyBuy.EasyBuyServices.Model.ParseRequest;
+import org.EasyBuy.EasyBuyServices.guice.AbzoobaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class AbzoobaRoute extends RouteBuilder {
-	static final String ABZOOBA_REST_URL = "http4://52.23.170.75:5000/model1";
-	//static final String ABZOOBA_REST_URL ="http4://localhost:9090/ocr/rest/abzoobaParse/parseText";
+@Singleton
+@Path("/abzooba")
+public class AbzoobaResource {
 
-    @Override
-    public void configure() throws Exception {
-        from("direct:getAttributes")
-        .marshal().json(JsonLibrary.Jackson)
-        .setProperty("requestJson", body())        
-        .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
-        .to(ABZOOBA_REST_URL)
-        .convertBodyTo(String.class)
-        .process(new Processor() {
-			@Override
-			public void process(Exchange exchange) throws Exception {
-				Map<String, Object> myMap=null;
-				myMap = JsonstringToMap.jsonString2Map(exchange.getIn().getBody(String.class));
-				myMap.remove("id");
-				myMap.remove("Raw_Data");
-				String JsonRequest = exchange.getProperty("requestJson", String.class);
-				JSONObject requestJson = new JSONObject(JsonRequest);
-				String fileName=(String) requestJson.get("imageFileName");
-				String upcNum = fileName.substring(0, fileName.lastIndexOf('.'));
-				myMap.put("UPC Number", upcNum);
-				exchange.getIn().setBody(myMap);
-			}
-		})
-		.setHeader("Access-Control-Allow-Origin", constant("*"));
+    private static Logger logger = LoggerFactory.getLogger(AbzoobaResource.class);
+    private final AbzoobaService abzoobaService;
+
+	@Inject
+	public AbzoobaResource(AbzoobaService abzoobaService) {
+		this.abzoobaService = abzoobaService;
+	}
+
+
+	@POST
+	@Path("/parseText")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Response getItem(ParseRequest parseRequest ) {
+        logger.debug("Fetching Attributes uisng Abzooba");
+        return Response.ok(abzoobaService.getAttributes(parseRequest))
+        		.header("Access-Control-Allow-Origin", "*")
+        		.build()
+        ;
     }
-
 }

@@ -15,8 +15,9 @@ public class AbzoobaRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("direct:getAttributes")
+       from("direct:getAttributes")
         .marshal().json(JsonLibrary.Jackson)
+        .setProperty("requestJson", body())
         .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
         .to(ABZOOBA_REST_URL)
         .convertBodyTo(String.class)
@@ -27,10 +28,11 @@ public class AbzoobaRoute extends RouteBuilder {
 				myMap = JsonstringToMap.jsonString2Map(exchange.getIn().getBody(String.class));
 				myMap.remove("id");
 				myMap.remove("Raw_Data");
-				myMap.put("UPC Number", parseInput.getImageFileName());
+				JSONObject requestJson = exchange.getProperty("requestJson", JSONObject.class);
+				myMap.put("UPC Number", requestJson.get("ImageFileName"));
 				exchange.getIn().setBody(myMap);;
 			}
 		});
-    }
+	}
 
 }

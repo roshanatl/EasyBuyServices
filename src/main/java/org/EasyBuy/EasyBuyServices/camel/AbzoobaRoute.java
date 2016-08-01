@@ -13,12 +13,13 @@ import org.codehaus.jettison.json.JSONObject;
 
 public class AbzoobaRoute extends RouteBuilder {
 	static final String ABZOOBA_REST_URL = "http4://52.23.170.75:5000/model1";
+	//static final String ABZOOBA_REST_URL ="http4://localhost:9090/ocr/rest/abzoobaParse/parseText";
 
     @Override
     public void configure() throws Exception {
-       from("direct:getAttributes")
+        from("direct:getAttributes")
         .marshal().json(JsonLibrary.Jackson)
-        .setProperty("requestJson", body())
+        .setProperty("requestJson", body())        
         .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
         .to(ABZOOBA_REST_URL)
         .convertBodyTo(String.class)
@@ -29,11 +30,15 @@ public class AbzoobaRoute extends RouteBuilder {
 				myMap = JsonstringToMap.jsonString2Map(exchange.getIn().getBody(String.class));
 				myMap.remove("id");
 				myMap.remove("Raw_Data");
-				JSONObject requestJson = exchange.getProperty("requestJson", JSONObject.class);
-				myMap.put("UPC Number", requestJson.get("ImageFileName"));
-				exchange.getIn().setBody(myMap);;
+				String JsonRequest = exchange.getProperty("requestJson", String.class);
+				JSONObject requestJson = new JSONObject(JsonRequest);
+				String fileName=(String) requestJson.get("imageFileName");
+				String upcNum = fileName.substring(0, fileName.lastIndexOf('.'));
+				myMap.put("UPC Number", upcNum);
+				exchange.getIn().setBody(myMap);
 			}
-		});
-	}
+		})
+		.setHeader("Access-Control-Allow-Origin", constant("*"));
+    }
 
 }

@@ -1,7 +1,5 @@
 package org.EasyBuy.EasyBuyServices.jersey;
 
-import java.util.Map;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
@@ -9,6 +7,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.EasyBuy.EasyBuyServices.Model.ParseRequest;
 import org.EasyBuy.EasyBuyServices.guice.AbzoobaService;
@@ -32,8 +31,11 @@ public class AbzoobaResource {
 	@Path("/parseText")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String,Object> getItem(ParseRequest parseRequest ) {
+    public Response getItem(ParseRequest parseRequest ) {
         logger.debug("Fetching Attributes uisng Abzooba");
-        return abzoobaService.getAttributes(parseRequest);
+        return Response.ok(abzoobaService.getAttributes(parseRequest))
+        		.header("Access-Control-Allow-Origin", "*")
+        		.build()
+        ;
     }
 }

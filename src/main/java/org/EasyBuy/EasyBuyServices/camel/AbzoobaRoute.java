@@ -27,6 +27,7 @@ public class AbzoobaRoute extends RouteBuilder {
 				myMap = JsonstringToMap.jsonString2Map(exchange.getIn().getBody(String.class));
 				myMap.remove("id");
 				myMap.remove("Raw_Data");
+				myMap.put("UPC Number", parseInput.getImageFileName());
 				exchange.getIn().setBody(myMap);;
 			}
 		});

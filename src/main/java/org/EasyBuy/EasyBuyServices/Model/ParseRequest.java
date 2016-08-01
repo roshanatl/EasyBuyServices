@@ -3,6 +3,8 @@ package org.EasyBuy.EasyBuyServices.Model;
 public class ParseRequest {
 	private String id;
 	private String text;
+	private String imageFileName;
+	
 	public String getId() {
 		return id;
 	}
@@ -14,6 +16,12 @@ public class ParseRequest {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	public String getImageFileName() {
+		return imageFileName;
+	}
+	public void setImageFileName(String imageFileName) {
+		this.imageFileName = imageFileName;
 	}
 	
 

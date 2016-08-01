@@ -34,7 +34,7 @@ public class AbzoobaRoute extends RouteBuilder {
 				String fileName=(String) requestJson.get("imageFileName");
 				String upcNum = fileName.substring(0, fileName.lastIndexOf('.'));
 				myMap.put("UPC Number", upcNum);
-				exchange.getIn().setBody(myMap);;
+				exchange.getIn().setBody(myMap);
 			}
 		});
     }
